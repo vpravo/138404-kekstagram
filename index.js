@@ -1,14 +1,15 @@
-const path = require("path");
-const getDirName = filename => path.basename(path.dirname(filename));
+'use strict';
+const path = require(`path`);
+const getDirName = (filename) => path.basename(path.dirname(filename));
 
-const outputText = textValue => console.log(textValue);
-сonst outputTextError = textValue => console.error(textValue);
+const outputText = (textValue) => console.log(textValue);
+const outputTextError = (textValue) => console.error(textValue);
 const exitSucces = () => process.exit(0);
 const readCommandProcess = () => process.argv[2];
 const exitFail = () => process.exit(1);
 
 const textWithoutComands = `Привет пользователь!\nЭта программа будет запускать сервер «${getDirName(
-  __filename
+    __filename
 )}».\nАвтор: Кекс.`;
 const textComandHelp = `Доступные команды:\n--help — печатает этот текст;\n--version — печатает версию приложения;`;
 const versionApp = `v.0.0.1`;
