@@ -1,33 +1,28 @@
-'use strict';
-const path = require(`path`);
-const getDirName = (filename) => path.basename(path.dirname(filename));
+"use strict";
 
-const outputText = (textValue) => console.log(textValue);
-const outputTextError = (textValue) => console.error(textValue);
-const exitSucces = () => process.exit(0);
-const readCommandProcess = () => process.argv[2];
-const exitFail = () => process.exit(1);
+const {exitSucces, exitFail, readCommandProcess} = require(`./src/utils`);
 
-const textWithoutComands = `Привет пользователь!\nЭта программа будет запускать сервер «${getDirName(
-    __filename
-)}».\nАвтор: Кекс.`;
-const textComandHelp = `Доступные команды:\n--help — печатает этот текст;\n--version — печатает версию приложения;`;
-const versionApp = `v.0.0.1`;
-const textComandVersion = `${versionApp}`;
-const textUnkownCommand = `Неизвестная команда ${readCommandProcess()}.\nЧтобы прочитать правила использования приложения, наберите "--help"`;
+const emptyCommand = require(`./src/empty`);
+const errorCommand = require(`./src/error`);
 
 const commands = {
-  "--version": textComandVersion,
-  "--help": textComandHelp
+  "--author": require(`./src/author`),
+  "--license": require(`./src/license`),
+  "--description": require(`./src/description`),
+  "--version": require(`./src/version`),
+  "--help": require(`./src/help`)
 };
 
+const {"--help": help} = commands;
+help.execute = help.execute.bind(help, commands);
+
 if (process.argv.length === 2) {
-  outputText(textWithoutComands);
+  emptyCommand.execute();
   exitSucces();
 } else if (commands[readCommandProcess()]) {
-  outputText(commands[readCommandProcess()]);
+  commands[readCommandProcess()].execute();
   exitSucces();
 } else {
-  outputTextError(textUnkownCommand);
+  errorCommand.execute(readCommandProcess());
   exitFail();
 }
