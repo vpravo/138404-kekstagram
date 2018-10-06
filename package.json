@@ -35,5 +35,8 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "colors": "^1.3.2"
   }
 }

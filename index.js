@@ -19,10 +19,14 @@ help.execute = help.execute.bind(help, commands);
 if (process.argv.length === 2) {
   emptyCommand.execute();
   exitSucces();
-} else if (commands[readCommandProcess()]) {
-  commands[readCommandProcess()].execute();
-  exitSucces();
-} else {
-  errorCommand.execute(readCommandProcess());
-  exitFail();
+}
+
+if (readCommandProcess()) {
+  try {
+    commands[readCommandProcess()].execute();
+    exitSucces();
+  } catch (err) {
+    errorCommand.execute(readCommandProcess());
+    exitFail();
+  }
 }
