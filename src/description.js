@@ -1,6 +1,7 @@
 "use strict";
 const {description} = require(`../package`);
 const {printCommand} = require(`./utils`);
+
 const colors = require(`colors/safe`);
 
 module.exports = {
