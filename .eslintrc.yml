@@ -4,4 +4,5 @@ env:
   node: true
   commonjs: true
   es6: true
+  mocha: true
 extends: 'htmlacademy/node'
