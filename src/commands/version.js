@@ -1,5 +1,6 @@
-"use strict";
-const {version} = require(`../package`);
+'use strict';
+
+const {version} = require(`../../package`);
 const {printCommand} = require(`./utils`);
 const colors = require(`colors/safe`);
 

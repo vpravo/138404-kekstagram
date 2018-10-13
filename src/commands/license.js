@@ -1,5 +1,6 @@
-"use strict";
-const {license} = require(`../package`);
+'use strict';
+
+const {license} = require(`../../package`);
 const {printCommand} = require(`./utils`);
 const colors = require(`colors/safe`);
 

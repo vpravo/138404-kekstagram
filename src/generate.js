@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const effects = [`none`, `chrome`, `sepia`, `marvin`, `phobos`, `heat`];
 const hashtags = [
@@ -39,7 +39,7 @@ const getRandomNumberInRange = (from, to) =>
   Math.floor(from + Math.random() * (to - from + 1));
 
 const getRandomArrayEl = (array) =>
-  array[getRandomNumberInRange(0, array.length)];
+  array[getRandomNumberInRange(0, array.length - 1)];
 
 const getRandomArray = (array, max) =>
   array

@@ -1,5 +1,6 @@
-"use strict";
-const {author, name} = require(`../package`);
+'use strict';
+
+const {author, name} = require(`../../package`);
 const {printCommand} = require(`./utils`);
 
 module.exports = {
