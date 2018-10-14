@@ -1,4 +1,5 @@
-"use strict";
+'use strict';
+
 const {printCommandError} = require(`./utils`);
 const colors = require(`colors/safe`);
 

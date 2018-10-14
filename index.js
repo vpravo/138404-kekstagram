@@ -1,16 +1,22 @@
 "use strict";
 
-const {exitSucces, exitFail, readCommandProcess} = require(`./src/utils`);
+const {
+  exitSucces,
+  exitWithError,
+  readCommandProcess
+} = require(`./src/commands/utils`);
 
-const emptyCommand = require(`./src/empty`);
-const errorCommand = require(`./src/error`);
+const {Readline} = require(`./src/readline`);
+
+const emptyCommand = require(`./src/commands/empty`);
+const errorCommand = require(`./src/commands/error`);
 
 const commands = {
-  "--author": require(`./src/author`),
-  "--license": require(`./src/license`),
-  "--description": require(`./src/description`),
-  "--version": require(`./src/version`),
-  "--help": require(`./src/help`)
+  "--author": require(`./src/commands/author`),
+  "--license": require(`./src/commands/license`),
+  "--description": require(`./src/commands/description`),
+  "--version": require(`./src/commands/version`),
+  "--help": require(`./src/commands/help`)
 };
 
 const {"--help": help} = commands;
@@ -18,7 +24,7 @@ help.execute = help.execute.bind(help, commands);
 
 if (process.argv.length === 2) {
   emptyCommand.execute();
-  exitSucces();
+  new Readline().init();
 }
 
 if (readCommandProcess()) {
@@ -27,6 +33,6 @@ if (readCommandProcess()) {
     exitSucces();
   } catch (err) {
     errorCommand.execute(readCommandProcess());
-    exitFail();
+    exitWithError();
   }
 }

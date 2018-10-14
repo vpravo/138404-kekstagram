@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const {author} = require(`../package`);
+const {author} = require(`../../package`);
 const {printCommand} = require(`./utils`);
 const colors = require(`colors/safe`);
 

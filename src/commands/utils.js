@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   printCommand(textValue) {
@@ -10,7 +10,7 @@ module.exports = {
   exitSucces() {
     process.exit(0);
   },
-  exitFail() {
+  exitWithError() {
     process.exit(1);
   },
   readCommandProcess() {

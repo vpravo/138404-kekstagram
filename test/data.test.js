@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 /* eslint max-nested-callbacks: ["error", 4]*/
 const {
   generateEntity,
   effects,
   convertDaysToMilliseconds
-} = require(`../generate`);
+} = require(`../src/generate`);
 const assert = require(`assert`);
 
 const isStringTrue = (string) => assert.equal(typeof string, `string`);

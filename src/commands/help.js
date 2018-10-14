@@ -1,4 +1,5 @@
-"use strict";
+'use strict';
+
 const {printCommand} = require(`./utils`);
 const colors = require(`colors/safe`);
 
