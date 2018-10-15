@@ -16,7 +16,8 @@ const commands = {
   "--license": require(`./src/commands/license`),
   "--description": require(`./src/commands/description`),
   "--version": require(`./src/commands/version`),
-  "--help": require(`./src/commands/help`)
+  "--help": require(`./src/commands/help`),
+  "--server": require(`./src/commands/server`)
 };
 
 const {"--help": help} = commands;
@@ -30,7 +31,9 @@ if (process.argv.length === 2) {
 if (readCommandProcess()) {
   try {
     commands[readCommandProcess()].execute();
-    exitSucces();
+    if (readCommandProcess() !== `--server`) {
+      exitSucces();
+    }
   } catch (err) {
     errorCommand.execute(readCommandProcess());
     exitWithError();
