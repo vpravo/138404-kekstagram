@@ -1,85 +1,46 @@
-"use strict";
+'use strict';
 
-const http = require(`http`);
-const fs = require(`fs`);
-const {
-  promisify
-} = require(`util`);
-const {
-  parse
-} = require(`url`);
-const {
-  extname
-} = require(`path`);
+const express = require(`express`);
+const path = require(`path`);
 const colors = require(`colors/safe`);
+const postRouter = require(`./routes/posts`);
 
 const {
   printCommand,
   printCommandError
 } = require(`./commands/utils`);
 
-const readfile = promisify(fs.readFile);
-const {
-  STATUS_CODES: codes
-} = http;
+const app = express();
+const defaultPort = 3000;
 
-const HOST_NAME = `127.0.0.1`;
-const DEFAULT_PORT = 3000;
-const FILE_DIR = `./static/`;
-const file = (path) => FILE_DIR + path;
+const staticPath = path.resolve(__dirname, `../static/`);
 
-const TYPES = {
-  css: `text/css`,
-  html: `text/html; charset=UTF-8`,
-  jpg: `image/jpeg`,
-  png: `image/png`,
-  ico: `image/x-icon`
-};
+const NOT_FOUND_HANDLER = (req, res) =>
+  res.status(404).send(`Page was not found`);
 
-const indexPage = file(`index.html`);
-
-const getIndexPage = async (res) => {
-  try {
-    const data = await readfile(indexPage, `utf8`);
-    res.setHeader(`Content-Type`, TYPES.html);
-    res.statusCode = 200;
-    res.end(data);
-  } catch (err) {
-    printCommandError(err);
-    res.statusCode = 400;
-    res.end(codes[400]);
+const ERROR_HANDLER = (err, req, res, _next) => {
+  if (err) {
+    printCommandError(colors.red(err));
+    res.status(err.code || 500).send(err.message);
   }
 };
 
-const getFile = async (url, res) => {
-  try {
-    const ext = extname(url.path).slice(1);
-    const type = TYPES[ext] || `text/plain`;
-    const data = await readfile(file(url.path));
-    res.setHeader(`Content-Type`, type);
-    res.statusCode = 200;
-    res.end(data);
-  } catch (err) {
-    printCommandError(err);
-    res.statusCode = 400;
-    res.end(codes[400]);
-  }
-};
+app.use(express.static(staticPath));
+app.use(`/api/posts`, postRouter);
+app.use(NOT_FOUND_HANDLER);
+app.use(ERROR_HANDLER);
 
-const server = http.createServer((req, res) => {
-  const url = parse(req.url);
-  if (url.path === `/`) {
-    getIndexPage(res);
-  } else {
-    getFile(url, res);
-  }
-});
-
-const start = (port = DEFAULT_PORT) =>
-  server.listen(port, HOST_NAME, () =>
-    printCommand(colors.green(`Server started at: http://${HOST_NAME}:${port}`))
+const start = (port = defaultPort) =>
+  app.listen(port, () =>
+    printCommand(`Server start at http://localhost:${port}`)
   );
 
+
 module.exports = {
-  start
+  start,
+  app,
 };
+
+if (require.main === module) {
+  start();
+}
