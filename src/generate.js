@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const effects = [`none`, `chrome`, `sepia`, `marvin`, `phobos`, `heat`];
 const hashtags = [
@@ -43,20 +43,20 @@ const getRandomArrayEl = (array) =>
 
 const getRandomArray = (array, max) =>
   array
-  .sort(randomSort)
-  .slice(0, getRandomNumberInRange(1, max))
-  .map((item) => `#${item}`);
+    .sort(randomSort)
+    .slice(0, getRandomNumberInRange(1, max))
+    .map((item) => `#${item}`);
 
 const getRandomString = (desc) =>
   desc
-  .split(` `)
-  .sort(randomSort)
-  .join(` `);
+    .split(` `)
+    .sort(randomSort)
+    .join(` `);
 
 const getRandomArrayOfString = (desc, max) =>
   new Array(getRandomNumberInRange(1, max))
-  .fill(``)
-  .map(() => getRandomString(desc));
+    .fill(``)
+    .map(() => getRandomString(desc));
 
 const getRandomDate = (now, max) =>
   getRandomNumberInRange(now - convertDaysToMilliseconds(max), now);
