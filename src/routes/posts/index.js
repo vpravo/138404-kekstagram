@@ -8,6 +8,8 @@ const multer = require(`multer`);
 const jsonParse = express.json();
 const upload = multer();
 const NotFoundError = require(`../../error/not-found-error`);
+const validate = require(`./validate`);
+const ValidateError = require(`../../error/validate`);
 
 const SKIP_DEFAULT = 0;
 const LIMIT_DEFAULT = 50;
@@ -37,14 +39,24 @@ postsRouter.get(`/:date`, (req, res) => {
   res.send(post);
 });
 
-postsRouter.post(``, jsonParse, upload.single(`url`), (req, res) => {
+postsRouter.post(``, jsonParse, upload.single(`filename`), (req, res) => {
   const {body, file} = req;
 
   if (file) {
-    body.url = file.originalname;
+    const {mimetype, originalname} = file;
+    body.filename = {
+      mimetype,
+      originalname
+    };
   }
 
-  res.send(body);
+  res.send(validate(body));
+});
+
+postsRouter.use((err, req, res, _next) => {
+  if (err instanceof ValidateError) {
+    res.status(err.code).json(err.errors);
+  }
 });
 
 module.exports = postsRouter;
