@@ -60,15 +60,12 @@ describe(`GET`, () => {
 
     it(`get post with / at the end`, async () => {
       const date = new Date(2029, 2, 1);
-      const response = await supertest(app)
+      return await supertest(app)
         .get(`/api/posts/${date}/`)
         .set(`Accept`, `application/json`)
         .expect(404)
         .expect(`Не найден пост с датой`)
         .expect(`Content-Type`, /html/);
-
-      const post = response.body;
-      assert.deepEqual(post.date, date);
     });
   });
 

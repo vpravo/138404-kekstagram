@@ -87,7 +87,7 @@ const validate = (body) => {
     }
   }
 
-  if (errors.length) {
+  if (errors.length > 0) {
     throw new ValidateError(errors);
   }
 

@@ -57,6 +57,7 @@ postsRouter.use((err, req, res, _next) => {
   if (err instanceof ValidateError) {
     res.status(err.code).json(err.errors);
   }
+  _next(err);
 });
 
 module.exports = postsRouter;
