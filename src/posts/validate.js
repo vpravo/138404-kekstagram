@@ -1,6 +1,6 @@
 'use strict';
 
-const ValidateError = require(`../../error/validate`);
+const ValidateError = require(`../error/validate`);
 const data = require(`./data`);
 
 const HASHTAGS = {
@@ -41,10 +41,10 @@ const validate = (body) => {
 
   if (filename) {
     if (!data.fileType.test(filename.mimetype)) {
-      setError(`file`, `Field 'filename' must be a image type!`);
+      setError(`fileName`, `Field 'filename' must be a image type!`);
     }
   } else {
-    setError(`file`, `Field 'filename' is required!`);
+    setError(`fileName`, `Field 'filename' is required!`);
   }
 
   if (scale !== undefined) {
@@ -67,8 +67,8 @@ const validate = (body) => {
     setError(`description`, `Field 'descriptoin' must be less then ${data.descriptionMax} charsets!`);
   }
 
-  if (hashtags) {
-    const list = hashtags.trim().split(/\s+/);
+  if (Array.isArray(hashtags)) {
+    const list = hashtags;
 
     if (HASHTAGS.length(list)) {
       setError(`hashtags`, `Field 'hashtags' must be less then ${data.hashtagsMaxLength} hashtags!`);

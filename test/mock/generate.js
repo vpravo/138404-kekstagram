@@ -61,7 +61,7 @@ const getRandomArrayOfString = (desc, max) =>
 const getRandomDate = (now, max) =>
   getRandomNumberInRange(now - convertDaysToMilliseconds(max), now);
 
-const generateEntity = () => ({
+const generateEntity = (date) => ({
   url: `https://picsum.photos/600/?random`,
   scale: getRandomNumberInRange(0, 100),
   effect: getRandomArrayEl(effects),
@@ -69,13 +69,14 @@ const generateEntity = () => ({
   description: getRandomString(description),
   likes: getRandomNumberInRange(0, 1000),
   comments: getRandomArrayOfString(description, 10),
-  date: getRandomDate(Date.now(), 7)
+  date: date || getRandomDate(Date.now(), 7)
 });
 
 const generateData = (count) => {
+  const first = new Date(2049, 0, 1).valueOf();
   const arr = new Array(count);
   for (let i = 0; i < count; i++) {
-    arr[i] = generateEntity();
+    arr[i] = generateEntity(!i && first);
   }
   return arr;
 };

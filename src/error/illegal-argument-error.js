@@ -1,9 +1,9 @@
 "use strict";
 
-module.exports = class NotFoundError extends Error {
+module.exports = class IllegalArgumentError extends Error {
   constructor(message) {
     super(message);
-    this.code = 404;
+    this.code = 400;
     this.message = message;
   }
 };
