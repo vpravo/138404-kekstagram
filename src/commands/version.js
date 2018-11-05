@@ -1,7 +1,7 @@
 'use strict';
 
 const {version} = require(`../../package`);
-const {printCommand} = require(`./utils`);
+const {printCommand, exitSucces} = require(`./utils`);
 const colors = require(`colors/safe`);
 
 const colorsList = [
@@ -21,5 +21,6 @@ module.exports = {
   description: `Print version of the project`,
   execute() {
     printCommand(colorize(version));
+    exitSucces();
   }
 };

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const effects = [`none`, `chrome`, `sepia`, `marvin`, `phobos`, `heat`];
 const hashtags = [

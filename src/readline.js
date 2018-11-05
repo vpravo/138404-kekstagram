@@ -1,7 +1,7 @@
 'use strict';
 
 const readline = require(`readline`);
-const colors = require(`colors/safe`);
+const {red, green, black} = require(`colors/safe`);
 
 const {
   generateData
@@ -30,11 +30,11 @@ class Readline {
 
     this.rl
       .on(`close`, () => {
-        printCommand(colors.green(`Thanks, goodbay!`));
+        printCommand(green(`Thanks, goodbay!`));
         exitSucces();
       })
       .on(`error`, (err) => {
-        printCommandError(colors.red(err));
+        printCommandError(red(err));
         exitWithError();
       });
   }
@@ -64,7 +64,7 @@ class Readline {
         this.data = generateData(answer);
         this.getPath();
       } else {
-        printCommand(colors.red(`Value must be a number`));
+        printCommand(red(`Value must be a number`));
         this.getValue();
       }
     });
@@ -124,12 +124,12 @@ class Readline {
 
   static writeFile(path, data) {
     fs.writeFileSync(path, JSON.stringify(data));
-    printCommand(colors.black.underline(`File was created!`));
+    printCommand(black.underline(`File was created!`));
   }
 
   static unlink(path) {
     fs.unlinkSync(path);
-    printCommand(colors.red(`File was deleted!`));
+    printCommand(red(`File was deleted!`));
   }
 }
 

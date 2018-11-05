@@ -1,8 +1,7 @@
-"use strict";
+'use strict';
 
+require(`dotenv`).config();
 const {
-  exitSucces,
-  exitWithError,
   readCommandProcess
 } = require(`./src/commands/utils`);
 
@@ -17,6 +16,7 @@ const commands = {
   "--description": require(`./src/commands/description`),
   "--version": require(`./src/commands/version`),
   "--help": require(`./src/commands/help`),
+  "--fill": require(`./src/commands/fill`),
   "--server": require(`./src/commands/server`)
 };
 
@@ -31,11 +31,7 @@ if (process.argv.length === 2) {
 if (readCommandProcess()) {
   try {
     commands[readCommandProcess()].execute();
-    if (readCommandProcess() !== `--server`) {
-      exitSucces();
-    }
   } catch (err) {
     errorCommand.execute(readCommandProcess());
-    exitWithError();
   }
 }

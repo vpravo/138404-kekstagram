@@ -1,15 +1,19 @@
 'use strict';
 
 const db = require(`../database/db`);
+const logger = require(`../logger`);
 
 const setupCollection = async () => {
   const dBase = await db;
   const collection = dBase.collection(`posts`);
-  collection.createIndex({
-    date: 1
-  }, {
-    unique: true
-  });
+  collection.createIndex(
+      {
+        date: 1
+      },
+      {
+        unique: true
+      }
+  );
   return collection;
 };
 
@@ -31,6 +35,24 @@ class PostsStore {
   async save(data) {
     return (await this.collection).insertOne(data);
   }
+
+  async drop() {
+    return (await this.collection).drop((err, deleteSuccess) => {
+      if (err) {
+        throw err;
+      }
+
+      if (deleteSuccess) {
+        logger.info(`kekstagram-post collection deleted`);
+      }
+
+      this.collection = setupCollection();
+    });
+  }
 }
 
-module.exports = new PostsStore(setupCollection().catch((err) => console.error(`Field to setup collections 'posts'`, err)));
+module.exports = new PostsStore(
+    setupCollection().catch((err) =>
+      logger.error(`Field to setup collections 'posts'`, err)
+    )
+);
