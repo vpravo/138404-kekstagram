@@ -1,9 +1,11 @@
-"use strict";
+'use strict';
 
-module.exports = class NotFoundError extends Error {
+class NotFoundError extends Error {
   constructor(message) {
     super(message);
     this.code = 404;
     this.message = message;
   }
-};
+}
+
+module.exports = NotFoundError;

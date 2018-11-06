@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const Cursor = require(`./cursor-mock`);
 const {generateData} = require(`./generate`);
@@ -11,9 +11,6 @@ class PostsStoreMock {
   }
 
   async getPost(date) {
-    console.log(date);
-    console.log(Array.isArray(this.data));
-    console.log(this.data[0]);
     return this.data.find((it) => it.date === date);
   }
 

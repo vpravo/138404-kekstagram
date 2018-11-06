@@ -1,14 +1,15 @@
-'use strict';
+"use strict";
 
 const {description} = require(`../../package`);
-const {printCommand} = require(`./utils`);
+const {printCommand, exitSucces} = require(`./utils`);
 
-const colors = require(`colors/safe`);
+const {cyan} = require(`colors/safe`);
 
 module.exports = {
   name: `description`,
   description: `Print description of the project`,
   execute() {
-    printCommand(colors.cyan(description));
+    printCommand(cyan(description));
+    exitSucces();
   }
 };

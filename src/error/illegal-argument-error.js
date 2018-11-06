@@ -1,9 +1,11 @@
-"use strict";
+'use strict';
 
-module.exports = class IllegalArgumentError extends Error {
+class IllegalArgumentError extends Error {
   constructor(message) {
     super(message);
     this.code = 400;
     this.message = message;
   }
-};
+}
+
+module.exports = IllegalArgumentError;

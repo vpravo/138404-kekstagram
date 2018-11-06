@@ -1,14 +1,16 @@
 'use strict';
 
-const {printCommand} = require(`./utils`);
-const colors = require(`colors/safe`);
+const {printCommand, exitSucces} = require(`./utils`);
+const {gray, green} = require(`colors/safe`);
 
 const getCommandsList = (list) => {
   let result = [``];
 
   for (let item in list) {
     if (list.hasOwnProperty(item)) {
-      result.push(`--${colors.gray(list[item].name)} — ${colors.green(list[item].description)}`);
+      result.push(
+          `--${gray(list[item].name)} — ${green(list[item].description)}`
+      );
     }
   }
 
@@ -19,6 +21,7 @@ module.exports = {
   name: `help`,
   description: `Print avalibable commands`,
   execute(commands) {
-    printCommand(`Available commands: ${getCommandsList(commands)}`);
+    printCommand(`Доступные команды: ${getCommandsList(commands)}`);
+    exitSucces();
   }
 };

@@ -1,14 +1,17 @@
 'use strict';
 
-const {printCommandError} = require(`./utils`);
-const colors = require(`colors/safe`);
+const {printCommandError, exitWithError} = require(`./utils`);
+const {red} = require(`colors/safe`);
 
 module.exports = {
   name: `error`,
   description: `Shows error message`,
   execute(unknownCommand) {
     printCommandError(
-        `Unknown command: ${colors.red(unknownCommand)}. Try "--help" to view available commands`
+        `Unknown command: ${red(
+            unknownCommand
+        )}. Try "--help" to view available commands`
     );
+    exitWithError();
   }
 };

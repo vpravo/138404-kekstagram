@@ -4,19 +4,17 @@ const express = require(`express`);
 // eslint-disable-next-line new-cap
 const router = express.Router();
 const multer = require(`multer`);
+const logger = require(`../logger`);
 
-const {
-  Duplex
-} = require(`stream`);
-const MongoError = require(`mongodb`).MongoError;
+const {Duplex} = require(`stream`);
 
 const jsonParse = express.json();
 const upload = multer();
 
 const validate = require(`./validate`);
 const NotFoundError = require(`../error/not-found-error`);
-const ValidateError = require(`../error/validate`);
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
+const {ERROR_HANDLER, NOT_FOUND_HANDLER} = require(`../error/handlers`);
 
 const SKIP_DEFAULT = 0;
 const LIMIT_DEFAULT = 50;
@@ -30,6 +28,22 @@ const toStream = (buffer) => {
   return stream;
 };
 
+const format = (data) => {
+  const {date, description, effect, hashtags, likes, scale} = data;
+
+  const result = {
+    url: `/api/posts/${date}/image`,
+    description,
+    effect,
+    hashtags,
+    likes,
+    scale,
+    date
+  };
+
+  return result;
+};
+
 const toPage = async (cursor, skip = SKIP_DEFAULT, limit = LIMIT_DEFAULT) => {
   const packet = await cursor
     .skip(skip)
@@ -37,7 +51,7 @@ const toPage = async (cursor, skip = SKIP_DEFAULT, limit = LIMIT_DEFAULT) => {
     .toArray();
 
   return {
-    data: packet,
+    data: packet.map(format),
     skip,
     limit,
     total: await cursor.count()
@@ -72,7 +86,8 @@ router.get(
       }
 
       res.send(post);
-    }));
+    })
+);
 
 router.get(
     `/:date/image`,
@@ -89,38 +104,34 @@ router.get(
         throw new NotFoundError(`Пост с датой ${date} не найден`);
       }
 
-      const {
-        stream,
-        info
-      } = await router.imageStore.get(post._id);
+      const {stream, info} = await router.imageStore.get(post._id);
 
       res.set({
         "Content-Type": post.filename.mimetype,
         "Content-Length": info.length
       });
 
-      res.on(`error`, (e) => console.error(e));
+      res.on(`error`, (e) =>
+        logger.error(`Error with GET /:date/image response`, e)
+      );
       res.on(`end`, () => res.end());
-      stream.on(`error`, (e) => console.error(e));
+      stream.on(`error`, (e) =>
+        logger.error(`Error with /:date/image stream`, e)
+      );
       stream.on(`end`, () => res.end());
       stream.pipe(res);
-    }));
+    })
+);
 
 router.post(
     ``,
     jsonParse,
     upload.single(`filename`),
     asyncWrap(async (req, res, _next) => {
-      const {
-        body,
-        file
-      } = req;
+      const {body, file} = req;
 
       if (file) {
-        const {
-          mimetype,
-          originalname
-        } = file;
+        const {mimetype, originalname} = file;
         body.filename = {
           mimetype,
           name: originalname
@@ -140,36 +151,13 @@ router.post(
       }
 
       res.send(validated);
-    }));
-
-const NOT_FOUND_HANDLER = (req, res) => {
-  res.status(404).send(`Page was not found`);
-};
-
-const ERROR_HANDLER = (err, req, res, _next) => {
-  console.error(err);
-  if (err instanceof ValidateError) {
-    res.status(err.code).json(err.errors);
-    return;
-  }
-
-  if (err instanceof MongoError) {
-    res.status(400).json(err.message);
-    return;
-  }
-
-  if (err instanceof NotFoundError) {
-    res.status(err.code).json(err.message);
-    return;
-  }
-
-  res.status(err.code || 500).send(err.message);
-};
+    })
+);
 
 router.use(ERROR_HANDLER);
 router.use(NOT_FOUND_HANDLER);
 
-module.exports = function (postsStore, imageStore) {
+module.exports = (postsStore, imageStore) => {
   router.postsStore = postsStore;
   router.imageStore = imageStore;
   return router;
