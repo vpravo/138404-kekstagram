@@ -44,7 +44,11 @@ const format = (data) => {
   return result;
 };
 
-const toPage = async (cursor, skip = SKIP_DEFAULT, limit = LIMIT_DEFAULT) => {
+const toPage = async (
+  cursor,
+  skip = SKIP_DEFAULT,
+  limit = LIMIT_DEFAULT,
+) => {
   const packet = await cursor
     .skip(skip)
     .limit(limit)
@@ -56,6 +60,7 @@ const toPage = async (cursor, skip = SKIP_DEFAULT, limit = LIMIT_DEFAULT) => {
     limit,
     total: await cursor.count()
   };
+
 };
 
 router.get(
