@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const express = require(`express`);
 // eslint-disable-next-line new-cap
@@ -15,6 +15,7 @@ const validate = require(`./validate`);
 const NotFoundError = require(`../error/not-found-error`);
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const {ERROR_HANDLER, NOT_FOUND_HANDLER} = require(`../error/handlers`);
+const htmlTemplate = require(`./template`);
 
 const SKIP_DEFAULT = 0;
 const LIMIT_DEFAULT = 50;
@@ -48,19 +49,21 @@ const toPage = async (
   cursor,
   skip = SKIP_DEFAULT,
   limit = LIMIT_DEFAULT,
+  html
 ) => {
   const packet = await cursor
     .skip(skip)
     .limit(limit)
     .toArray();
 
-  return {
+  const result = {
     data: packet.map(format),
     skip,
     limit,
     total: await cursor.count()
   };
 
+  return html ? htmlTemplate(result) : result;
 };
 
 router.get(
@@ -69,6 +72,7 @@ router.get(
       const skip = parseInt(req.query.skip, 10) || SKIP_DEFAULT;
       const limit = parseInt(req.query.limit, 10) || LIMIT_DEFAULT;
       const data = await router.postsStore.allPosts;
+      const htmlAccept = req.get(`Accept`).includes(`text/html`);
 
       if (isNaN(skip) || isNaN(limit)) {
         throw new IllegalArgumentError(
@@ -76,7 +80,7 @@ router.get(
         );
       }
 
-      res.send(await toPage(data, skip, limit));
+      res.send(await toPage(data, skip, limit, htmlAccept));
     })
 );
 
