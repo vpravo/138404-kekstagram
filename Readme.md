@@ -1,7 +1,8 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Николай Солодухин](https://up.htmlacademy.ru/nodejs/2/user/138404).
-* Наставник: [Евгений Сальников](https://up.htmlacademy.ru/nodejs/2/user/24537).
+* Наставник: `No name`.
+
 
 ---
 
